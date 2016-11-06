@@ -60,16 +60,19 @@ class ViewController: UIViewController {
     
     @IBAction func performClear(_ sender: UIButton) {
         let op = sender.currentTitle!
+        
+        _typingMode = false // set typingMode = false
+        display.text = "0"  // always set display to 0
         switch op {
             
         case "C":   // clear all
             _calculator._clear()
         case "CE":  // clear entry
-            _typingMode = false
+            break
         default:
             break
         }
-        display.text = "0"  // always set display to 0
+
     }
     /** utility function */
 
