@@ -11,10 +11,16 @@ import UIKit
 class ViewController: UIViewController {
 
     var _typingMode = false
+    var _dotCount = 0
+    
     @IBOutlet weak var display: UILabel!
     
     @IBAction func touchDigit(_ sender: UIButton) {
         let digit = sender.currentTitle!
+        if digit == "." {
+            if _dotCount > 0 { return }
+            _dotCount += 1
+        }
         if _typingMode {
            display.text = (display.text)! + digit
         }
@@ -22,6 +28,7 @@ class ViewController: UIViewController {
             display.text = digit
             _typingMode = true
         }
+
     }
     
     var displayValue: Double{
@@ -35,6 +42,7 @@ class ViewController: UIViewController {
     private var _calculator: CalculatorBrain = CalculatorBrain()
     
     @IBAction func performOperation(_ sender: UIButton) {
+        _dotCount = 0   // clear dotCount when operation recevied
         if _typingMode{
             _calculator.setOperand(operand: displayValue)
         }
@@ -46,5 +54,8 @@ class ViewController: UIViewController {
         displayValue = _calculator.result
     }
     
+    
+    /** utility function */
+
 }
 
