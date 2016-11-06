@@ -8,22 +8,6 @@
 
 import Foundation
 
-func multiply(op1: Double, op2: Double) -> Double{
-    return op1 * op2;
-}
-func divide(op1: Double, op2: Double) -> Double{
-    return op1 / op2;
-}
-func add(op1: Double, op2: Double) -> Double{
-    return op1 + op2;
-}
-func minus(op1: Double, op2: Double) -> Double{
-    return op1 - op2;
-}
-func negate(op: Double) -> Double{
-    return -1 * op;
-}
-
 
 class CalculatorBrain{
     struct PendingBinaryOp {
@@ -32,6 +16,11 @@ class CalculatorBrain{
     }
     private var _accumulator: Double = 0.0
     private var _pending: PendingBinaryOp?
+    
+    func _clear(){// "C" --> clear all
+        _pending = nil
+        _accumulator = 0.0
+    }
     
     func setOperand(operand: Double) {
         if _pending != nil{
@@ -52,13 +41,21 @@ class CalculatorBrain{
     var _opMap: Dictionary<String, Operation> = [
         "π": Operation.Constant(M_PI),
         "e": Operation.Constant(M_E),
+        
         "√": Operation.UnaryOp(sqrt),
         "cos": Operation.UnaryOp(cos),
+        "sin": Operation.UnaryOp(sin),
+        "tan": Operation.UnaryOp(tan),
+        "log": Operation.UnaryOp(log),
+        "%": Operation.UnaryOp({ return $0/100 }),
+        
         "x": Operation.BinaryOp({ return $0 * $1}),
         "÷": Operation.BinaryOp({ return $0 / $1}),
         "+": Operation.BinaryOp({ return $0 + $1}),
         "-": Operation.BinaryOp({ return $0 - $1}),
-        "=": Operation.Equals
+        
+        "=": Operation.Equals,
+        
     ]
     
     func performOperation(symbol: String) {
