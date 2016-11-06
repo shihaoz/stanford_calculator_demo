@@ -10,17 +10,21 @@ import UIKit
 
 class ViewController: UIViewController {
 
-    var _typingMode = false
-    var _dotCount = 0
+    private var _typingMode = false
     
     private var _calculator: CalculatorBrain = CalculatorBrain()
+    private var _lastSelectetButton = UIButton()
     @IBOutlet weak var display: UILabel!
     
+    
     @IBAction func touchDigit(_ sender: UIButton) {
+        buttonTouched(buttonNow: sender)
+        
         let digit = sender.currentTitle!
-        if digit == "." {
-            if _dotCount > 0 { return }
-            _dotCount += 1
+        if digit == "."{
+            if ((display.text?.range(of: ".")) != nil){// if . already exists
+                return
+            }
             if !_typingMode {// dot is entered first
                 _typingMode = true
                 display.text = "0"
@@ -46,7 +50,7 @@ class ViewController: UIViewController {
 
     
     @IBAction func performOperation(_ sender: UIButton) {
-        _dotCount = 0   // clear dotCount when operation recevied
+        buttonTouched(buttonNow: sender)
         if _typingMode{
             _calculator.setOperand(operand: displayValue)
         }
@@ -59,8 +63,9 @@ class ViewController: UIViewController {
     }
     
     @IBAction func performClear(_ sender: UIButton) {
+        buttonTouched(buttonNow: sender)
         let op = sender.currentTitle!
-        
+
         _typingMode = false // set typingMode = false
         display.text = "0"  // always set display to 0
         switch op {
@@ -76,5 +81,12 @@ class ViewController: UIViewController {
     }
     /** utility function */
 
+    private func buttonTouched(buttonNow: UIButton?){
+        _lastSelectetButton.isSelected = false
+        if buttonNow != nil{
+            buttonNow?.isSelected = true
+            _lastSelectetButton = buttonNow!
+        }
+    }
 }
 
