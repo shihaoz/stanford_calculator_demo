@@ -15,6 +15,7 @@ class ViewController: UIViewController {
     private var _calculator: CalculatorBrain = CalculatorBrain()
     private var _lastSelectetButton = UIButton()
     @IBOutlet weak var display: UILabel!
+    @IBOutlet weak var actionDescription: UILabel!
     
     
     @IBAction func touchDigit(_ sender: UIButton) {
@@ -60,22 +61,25 @@ class ViewController: UIViewController {
         }
         
         displayValue = _calculator.result
+        updateAction()  // update the action description
     }
     
     @IBAction func performClear(_ sender: UIButton) {
         buttonTouched(buttonNow: sender)
+        
         let op = sender.currentTitle!
-
+        
         _typingMode = false // set typingMode = false
         display.text = "0"  // always set display to 0
+
         switch op {
-            
-        case "C":   // clear all
-            _calculator._clear()
-        case "CE":  // clear entry
-            break
-        default:
-            break
+            case "C":   // clear all
+                _calculator._clear()
+                actionDescription.text = " "    // clear action display
+            case "CE":  // clear entry
+                break
+            default:
+                break
         }
 
     }
@@ -86,6 +90,12 @@ class ViewController: UIViewController {
         if buttonNow != nil{
             buttonNow?.isSelected = true
             _lastSelectetButton = buttonNow!
+        }
+    }
+    private func updateAction(){
+        actionDescription.text = _calculator.description
+        if _calculator.isPartialResult{
+            actionDescription.text? += "..."
         }
     }
 }
